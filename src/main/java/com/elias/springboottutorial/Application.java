@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories("com.elias.springboottutorial.repository")
-//@EntityScan("com.elias.springboottutorial.model")
+@EntityScan("com.elias.springboottutorial.entity")
 @SpringBootApplication
 public class Application {
 
