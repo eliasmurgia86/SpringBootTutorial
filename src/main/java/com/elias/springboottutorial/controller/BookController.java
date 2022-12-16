@@ -1,28 +1,51 @@
 package com.elias.springboottutorial.controller;
 
+import com.elias.springboottutorial.dto.BookDto;
 import com.elias.springboottutorial.entity.Book;
-import com.elias.springboottutorial.exception.BookIdMismatchException;
-import com.elias.springboottutorial.exception.BookNotFoundException;
-import com.elias.springboottutorial.repository.BookRepository;
+import com.elias.springboottutorial.service.IBookService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
 
     @Autowired
-    private BookRepository bookRepository;
+    private IBookService bookService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
-    public Iterable findAll() {
-        return bookRepository.findAll();
+    @ResponseBody
+    public List<BookDto> findAll() {
+        List<Book> books = bookService.getAllBooks();
+        return books
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/title/{bookTitle}")
+/*    @GetMapping
+    public Iterable findAll() {
+        return bookRepository.findAll();
+    }*/
+
+    private BookDto convertToDto(Book book){
+        BookDto bookDto = modelMapper.map(book,BookDto.class);
+        return bookDto;
+    }
+
+    private Book convertToEntity(BookDto bookDto){
+        Book book = modelMapper.map(bookDto, Book.class);
+        return  book;
+    }
+
+    /*@GetMapping("/title/{bookTitle}")
     public List findByTitle(@PathVariable String bookTitle) {
         return bookRepository.findByTitle(bookTitle);
     }
@@ -54,5 +77,5 @@ public class BookController {
         bookRepository.findById(id)
                 .orElseThrow(BookNotFoundException::new);
         return bookRepository.save(book);
-    }
+    }*/
 }
