@@ -24,10 +24,22 @@ public class BookController {
     @ResponseBody
     public List<BookDto> findAll() {
         List<Book> books = bookService.getAllBooks();
-        return books
+
+        // add one book
+        Book b = new Book();
+        b.setAuthor("Elias");
+        books.add(b);
+
+        // Set used for all books
+        List<BookDto> booksDto = books
                 .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+
+        for(BookDto bookDto:booksDto)
+            bookDto.setUsed(true);
+
+        return booksDto;
     }
 
 /*    @GetMapping
