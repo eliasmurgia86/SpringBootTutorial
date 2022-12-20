@@ -1,4 +1,4 @@
-package com.elias.springboottutorial;
+package com.elias.springboottutorial.main;
 
 import com.elias.springboottutorial.entity.Book;
 import io.restassured.RestAssured;
